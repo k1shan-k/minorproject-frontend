@@ -1,0 +1,28 @@
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-03 21:42 UTC
+Nmap scan report for cseds.co (104.21.12.24)
+Host is up (0.0016s latency).
+Other addresses for cseds.co (not scanned): 172.67.151.81 2606:4700:3033::ac43:9751 2606:4700:3036::6815:c18
+Not shown: 996 filtered tcp ports (no-response)
+PORT     STATE SERVICE  VERSION
+80/tcp   open  http     Cloudflare http proxy
+|_http-title: Did not follow redirect to https://cseds.co/
+|_http-server-header: cloudflare
+443/tcp  open  ssl/http Cloudflare http proxy
+|_http-title: SoIT CSEDS
+| ssl-cert: Subject: commonName=cseds.co
+| Subject Alternative Name: DNS:cseds.co, DNS:*.cseds.co
+| Not valid before: 2024-11-28T22:58:47
+|_Not valid after:  2025-02-26T22:58:46
+|_http-server-header: cloudflare
+8080/tcp open  http     Cloudflare http proxy
+|_http-server-header: cloudflare
+8443/tcp open  ssl/http Cloudflare http proxy
+|_http-server-header: cloudflare
+| ssl-cert: Subject: commonName=cseds.co
+| Subject Alternative Name: DNS:cseds.co, DNS:*.cseds.co
+| Not valid before: 2024-11-28T22:58:47
+|_Not valid after:  2025-02-26T22:58:46
+|_http-title: 400 The plain HTTP request was sent to HTTPS port
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 95.83 seconds
