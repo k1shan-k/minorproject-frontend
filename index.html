@@ -224,8 +224,8 @@
     
     // Tool URLs (replace with actual endpoints)
     const toolURLs = {
-      '1': 'https://code.atlassoit.co/run_sitespeed', // Tool 1 endpoint
-      '2': 'https://example.com/tool2'  // Tool 2 endpoint
+      '1': 'https://flask-server-url.com/endpoint',  // Tool 1 (Flask) endpoint
+      '2': 'https://vapt.atlassoit.co/scan/'  // Tool 2 (Django) endpoint
     };
 
     const floodingWords = [
@@ -251,95 +251,100 @@
       div.textContent = word;
 
       // Random start positions
-      div.style.left = `${Math.random() * 100}vw`;
-      div.style.top = `${Math.random() * 100}vh`;
+      div.style.left = `${Math.random() * 100}%`;
+      div.style.top = `${Math.random() * 100}%`;
       div.style.animationDuration = `${Math.random() * 5 + 5}s`;
-
       document.body.appendChild(div);
-      setTimeout(() => div.remove(), 10000); // Remove after 10 seconds
+
+      // Remove after animation
+      setTimeout(() => {
+        div.remove();
+      }, 10000);
     }
 
     function createBinaryNumber() {
-      const binary = (Math.random() > 0.5 ? '1' : '0') + (Math.random() > 0.5 ? '1' : '0');
+      const binary = Math.random() > 0.5 ? '1' : '0';
       const div = document.createElement('div');
       div.classList.add('binary-number');
       div.textContent = binary;
 
-      // Random positions for the binary numbers
-      div.style.left = `${Math.random() * 100}vw`;
-      div.style.top = `${Math.random() * 100}vh`;
+      // Random start positions
+      div.style.left = `${Math.random() * 100}%`;
+      div.style.top = `${Math.random() * 100}%`;
       div.style.animationDuration = `${Math.random() * 5 + 5}s`;
-
       document.body.appendChild(div);
-      setTimeout(() => div.remove(), 10000);
+
+      // Remove after animation
+      setTimeout(() => {
+        div.remove();
+      }, 8000);
     }
 
-    function promptForInput(promptMessage) {
-      promptText.textContent = promptMessage;
-      inputField.value = '';
-      inputField.focus();
-    }
-
-    function postData(email, url, toolUrl) {
-      fetch(toolUrl, {
+    // Function to send POST request
+    function postData(url, data) {
+      return fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          email: email,
-          url: url
-        })
+        body: JSON.stringify(data)
       })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+        .then(response => response.json())
+        .then(data => data) // Return the response data
+        .catch(error => console.error('Error:', error));
     }
 
-    function handleStep(input) {
-      switch (currentStep) {
-        case 0:
-          toolSelected = input.trim();
-          if (toolURLs[toolSelected]) {
-            promptForInput("Enter URL to scan:");
-            currentStep++;
-          } else {
-            output.innerHTML += "<div class='output'>Invalid tool selection. Please choose 1 or 2.</div>";
-          }
-          break;
-
-        case 1:
-          url = input.trim();
-          promptForInput("Enter your email address:");
-          currentStep++;
-          break;
-
-        case 2:
-          email = input.trim();
-          const toolUrl = toolURLs[toolSelected];
-          output.innerHTML += `<div class='output'>Processing with tool ${toolSelected}...</div>`;
-          postData(email, url, toolUrl);
-          break;
-
-        default:
-          break;
+    function handleUserInput(input) {
+      // Handle selection of tool
+      if (currentStep === 0) {
+        if (input === '1' || input === '2') {
+          toolSelected = input;
+          promptText.innerText = 'Enter the URL for testing:';
+          currentStep = 1;
+        } else {
+          output.innerHTML += `<div class="output">Invalid selection. Please choose 1 or 2.</div>`;
+        }
+      } else if (currentStep === 1) {
+        url = input;
+        promptText.innerText = 'Enter your email address:';
+        currentStep = 2;
+      } else if (currentStep === 2) {
+        email = input;
+        promptText.innerText = 'Processing...';
+        // Send data to the selected tool
+        sendToolRequest();
+        currentStep = 0; // Reset for next cycle
       }
     }
 
-    inputField.addEventListener('keydown', function(e) {
+    // Send request to selected tool
+    function sendToolRequest() {
+      const data = { url: url, email: email };
+
+      // Show loading spinner
+      output.innerHTML += `<div class="output"><div class="spinner"></div> Sending request to Tool ${toolSelected}...</div>`;
+
+      postData(toolURLs[toolSelected], data)
+        .then(response => {
+          output.innerHTML += `<div class="output">Response from Tool ${toolSelected}:<pre>${JSON.stringify(response, null, 2)}</pre></div>`;
+        });
+    }
+
+    // Listen for input
+    inputField.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') {
-        const userInput = inputField.value.trim();
-        handleStep(userInput);
+        const input = inputField.value.trim();
+        if (input) {
+          handleUserInput(input);
+        }
+        inputField.value = '';
       }
     });
 
-    // Create word and binary flooding effects every 2 seconds
-    setInterval(createFloodWord, 2000);
-    setInterval(createBinaryNumber, 2500);
+    // Create background effects
+    setInterval(createFloodWord, 3000);
+    setInterval(createBinaryNumber, 3000);
+
   </script>
 </body>
 </html>
