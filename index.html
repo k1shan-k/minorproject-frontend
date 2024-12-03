@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLI Hacking Tools Interface</title>
+
+  <!-- Google Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <!-- Material UI Styles -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #121212;
+      color: #FFFFFF;
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .terminal {
+      background-color: rgba(30, 30, 30, 0.9);
+      border-radius: 10px;
+      padding: 30px;
+      width: 60%;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      font-family: 'Courier New', Courier, monospace;
+      overflow-y: auto;
+      max-height: 500px;
+      transition: max-height 0.5s ease-out;
+      z-index: 10;
+      position: relative;
+    }
+
+    .terminal-header {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #00FF00;
+      font-weight: 500;
+    }
+
+    .output, .input-field {
+      font-size: 18px;
+      color: #00FF00;
+      line-height: 1.5;
+    }
+
+    .output {
+      margin-bottom: 10px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #00FF00;
+      border-radius: 5px;
+      background-color: #2e2e2e;
+      color: #00FF00;
+      margin-top: 15px;
+      font-family: 'Courier New', Courier, monospace;
+      transition: all 0.3s ease;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: #76FF03;
+    }
+
+    .prompt {
+      font-size: 20px;
+      color: #76FF03;
+      margin-bottom: 10px;
+    }
+
+    .output-section {
+      padding: 10px;
+      border-radius: 10px;
+      background-color: #333;
+      margin-top: 20px;
+      box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 4px solid transparent;
+      border-top: 4px solid #00FF00;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Background Word Flooding */
+    .flood-word {
+      position: absolute;
+      font-family: 'Courier New', Courier, monospace;
+      color: rgba(0, 255, 0, 0.7);
+      font-size: 24px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.7;
+      white-space: nowrap;
+      animation: wordFall 10s linear infinite, glitch 1s infinite alternate;
+    }
+
+    /* Background Binary Numbers */
+    .binary-number {
+      position: absolute;
+      font-family: 'Courier New', Courier, monospace;
+      color: rgba(0, 255, 0, 0.7);
+      font-size: 18px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.7;
+      white-space: nowrap;
+      animation: binaryFall 8s linear infinite, glitch 1s infinite alternate;
+    }
+
+    @keyframes wordFall {
+      0% {
+        top: -10%;
+        left: -10%;
+        transform: rotate(0deg);
+      }
+      100% {
+        top: 110%;
+        left: 110%;
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes binaryFall {
+      0% {
+        top: -10%;
+        left: -10%;
+        transform: rotate(0deg);
+      }
+      100% {
+        top: 110%;
+        left: 110%;
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Glitch Effect */
+    @keyframes glitch {
+      0% {
+        text-shadow: 2px 2px 0 #ff00ff, -2px -2px 0 #00ff00;
+        transform: skew(0.5deg);
+      }
+      20% {
+        text-shadow: -2px -2px 0 #ff00ff, 2px 2px 0 #00ff00;
+        transform: skew(-0.5deg);
+      }
+      40% {
+        text-shadow: 2px -2px 0 #ff00ff, -2px 2px 0 #00ff00;
+        transform: skew(0.5deg);
+      }
+      60% {
+        text-shadow: -2px 2px 0 #ff00ff, 2px -2px 0 #00ff00;
+        transform: skew(-0.5deg);
+      }
+      80% {
+        text-shadow: 2px 2px 0 #ff00ff, -2px -2px 0 #00ff00;
+        transform: skew(0.5deg);
+      }
+      100% {
+        text-shadow: -2px -2px 0 #ff00ff, 2px 2px 0 #00ff00;
+        transform: skew(-0.5deg);
+      }
+    }
+
+    /* Neon Outline Flicker */
+    .flicker {
+      animation: flicker 1s infinite;
+    }
+
+    @keyframes flicker {
+      0% {
+        text-shadow: 0 0 10px #76FF03, 0 0 20px #76FF03, 0 0 30px #76FF03;
+        color: #00FF00;
+      }
+      50% {
+        text-shadow: none;
+        color: #ccc;
+      }
+      100% {
+        text-shadow: 0 0 10px #76FF03, 0 0 20px #76FF03, 0 0 30px #76FF03;
+        color: #00FF00;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="terminal" id="terminal">
+    <div class="terminal-header">CLI Tools Interface</div>
+    <div id="output" class="output-section"></div>
+    <div class="prompt" id="promptText">Select a tool (1 or 2):</div>
+    <input type="text" id="inputField" class="input-field" autofocus />
+  </div>
+
+  <script>
+    const terminal = document.getElementById('terminal');
+    const output = document.getElementById('output');
+    const inputField = document.getElementById('inputField');
+    const promptText = document.getElementById('promptText');
+    let currentStep = 0;
+    let toolSelected = '';
+    let url = '';
+    let email = '';
+    
+    // Tool URLs (replace with actual endpoints)
+    const toolURLs = {
+      '1': 'https://code.atlassoit.co/run_sitespeed', // Tool 1 endpoint
+      '2': 'https://example.com/tool2'  // Tool 2 endpoint
+    };
+
+    const floodingWords = [
+      'Decrypting... Please Wait...',
+      'Accessing Database...',
+      'Intrusion Detected!',
+      'Bypassing Firewall...',
+      'Attempting to Gain Root Access...',
+      'Encrypting Files...',
+      'Exploit Found: CVE-2024-XXXX',
+      'Logging into Remote Server...',
+      'System Breach: Level 3',
+      'Scanning Network for Vulnerabilities...',
+      'Command Executed...',
+      'Access Granted! Welcome, User.',
+      'Rootkit Installed... Proceeding with Attack'
+    ];
+
+    function createFloodWord() {
+      const word = floodingWords[Math.floor(Math.random() * floodingWords.length)];
+      const div = document.createElement('div');
+      div.classList.add('flood-word');
+      div.textContent = word;
+
+      // Random start positions
+      div.style.left = `${Math.random() * 100}vw`;
+      div.style.top = `${Math.random() * 100}vh`;
+      div.style.animationDuration = `${Math.random() * 5 + 5}s`;
+
+      document.body.appendChild(div);
+      setTimeout(() => div.remove(), 10000); // Remove after 10 seconds
+    }
+
+    function createBinaryNumber() {
+      const binary = (Math.random() > 0.5 ? '1' : '0') + (Math.random() > 0.5 ? '1' : '0');
+      const div = document.createElement('div');
+      div.classList.add('binary-number');
+      div.textContent = binary;
+
+      // Random positions for the binary numbers
+      div.style.left = `${Math.random() * 100}vw`;
+      div.style.top = `${Math.random() * 100}vh`;
+      div.style.animationDuration = `${Math.random() * 5 + 5}s`;
+
+      document.body.appendChild(div);
+      setTimeout(() => div.remove(), 10000);
+    }
+
+    function promptForInput(promptMessage) {
+      promptText.textContent = promptMessage;
+      inputField.value = '';
+      inputField.focus();
+    }
+
+    function postData(email, url, toolUrl) {
+      fetch(toolUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          url: url
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    }
+
+    function handleStep(input) {
+      switch (currentStep) {
+        case 0:
+          toolSelected = input.trim();
+          if (toolURLs[toolSelected]) {
+            promptForInput("Enter URL to scan:");
+            currentStep++;
+          } else {
+            output.innerHTML += "<div class='output'>Invalid tool selection. Please choose 1 or 2.</div>";
+          }
+          break;
+
+        case 1:
+          url = input.trim();
+          promptForInput("Enter your email address:");
+          currentStep++;
+          break;
+
+        case 2:
+          email = input.trim();
+          const toolUrl = toolURLs[toolSelected];
+          output.innerHTML += `<div class='output'>Processing with tool ${toolSelected}...</div>`;
+          postData(email, url, toolUrl);
+          break;
+
+        default:
+          break;
+      }
+    }
+
+    inputField.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        const userInput = inputField.value.trim();
+        handleStep(userInput);
+      }
+    });
+
+    // Create word and binary flooding effects every 2 seconds
+    setInterval(createFloodWord, 2000);
+    setInterval(createBinaryNumber, 2500);
+  </script>
+</body>
+</html>
