@@ -16,8 +16,8 @@ CORS(app)
 app.config['MAIL_SERVER'] = 'email-smtp.ap-south-1.amazonaws.com'  # Replace with your SMTP server
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'AKIAZ2GXZ2ORBYFBS3RB'  # Your email address
-app.config['MAIL_PASSWORD'] = 'BBUWzRD1bqCT5XodXc3WniN/eZi3x14OkTbhOrf25EHy'  # Your email password
+app.config['MAIL_USERNAME'] = 'AKYFBS3RB'  # Your email address
+app.config['MAIL_PASSWORD'] = 'BBUWzRD114OkTbhOrf25EHy'  # Your email password
 app.config['MAIL_DEFAULT_SENDER'] = 'hello@scans.atlassoit.co'
 
 mail = Mail(app)
