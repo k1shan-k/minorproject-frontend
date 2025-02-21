@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coming Soon - Atlassoit Security</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    
+    body {
+      background-color: #0a0a1a;
+      color: #ffffff;
+      overflow-x: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    #canvas-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: -1;
+    }
+    
+    .content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 2rem;
+      text-align: center;
+    }
+    
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 10%;
+      background-color: rgba(10, 10, 26, 0.7);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 100;
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #00ffcc;
+      letter-spacing: 1px;
+    }
+    
+    .btn {
+      background: linear-gradient(45deg, #00ffcc, #00bbff);
+      color: #0a0a1a;
+      padding: 0.7rem 1.5rem;
+      border-radius: 30px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 2rem;
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 255, 204, 0.2);
+    }
+    
+    h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+      background: linear-gradient(45deg, #00ffcc, #00bbff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .subtitle {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      color: #b3b3cc;
+      line-height: 1.6;
+      max-width: 600px;
+    }
+    
+    .countdown {
+      display: flex;
+      justify-content: center;
+      margin: 3rem 0;
+    }
+    
+    .countdown-item {
+      margin: 0 1rem;
+      min-width: 100px;
+    }
+    
+    .countdown-number {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, #00ffcc, #00bbff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    
+    .countdown-label {
+      font-size: 1rem;
+      color: #b3b3cc;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .notification-form {
+      margin-top: 2rem;
+      max-width: 500px;
+      width: 100%;
+    }
+    
+    .form-group {
+      position: relative;
+      margin-bottom: 1.5rem;
+      display: flex;
+    }
+    
+    .form-input {
+      flex: 1;
+      padding: 1rem 1.5rem;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .form-input:focus {
+      border-color: #00ffcc;
+      box-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+    }
+    
+    .submit-btn {
+      background: linear-gradient(45deg, #00ffcc, #00bbff);
+      border: none;
+      border-radius: 30px;
+      color: #0a0a1a;
+      padding: 0 1.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 0.5rem;
+      transition: transform 0.3s ease;
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .social-links {
+      margin-top: 3rem;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 0.5rem;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .social-icon:hover {
+      background-color: rgba(0, 255, 204, 0.2);
+      transform: translateY(-3px);
+    }
+    
+    .back-to-home {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #b3b3cc;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      transition: color 0.3s ease;
+    }
+    
+    .back-to-home:hover {
+      color: #00ffcc;
+    }
+    
+    .back-arrow {
+      margin-right: 0.5rem;
+    }
+    
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background-color: #00ffcc;
+      box-shadow: 0 0 10px 2px rgba(0, 255, 204, 0.5);
+      pointer-events: none;
+    }
+    
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+      
+      .subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .countdown {
+        flex-wrap: wrap;
+      }
+      
+      .countdown-item {
+        margin: 0.5rem;
+      }
+      
+      .countdown-number {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 3D Canvas Container -->
+  <div id="canvas-container"></div>
+  
+  <div class="content">
+    <nav>
+      <div class="logo">ATLASSOIT</div>
+      <div></div>
+    </nav>
+    
+    <h1>Coming Soon</h1>
+    <p class="subtitle">We're working on something exciting! Our team is building the next generation of cybersecurity solutions to protect your digital assets.</p>
+    
+    <div class="countdown">
+      <div class="countdown-item">
+        <div class="countdown-number" id="days">00</div>
+        <div class="countdown-label">Days</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-number" id="hours">00</div>
+        <div class="countdown-label">Hours</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-number" id="minutes">00</div>
+        <div class="countdown-label">Minutes</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-number" id="seconds">00</div>
+        <div class="countdown-label">Seconds</div>
+      </div>
+    </div>
+    
+    <div class="notification-form">
+      <p class="subtitle">Get notified when we launch. We don't spam, that's a promise.</p>
+      <div class="form-group">
+        <input type="email" class="form-input" placeholder="Enter your email address" />
+        <button class="submit-btn">Notify Me</button>
+      </div>
+    </div>
+    
+    <div class="social-links">
+      <div class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+        </svg>
+      </div>
+      <div class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+        </svg>
+      </div>
+      <div class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+          <rect x="2" y="9" width="4" height="12"></rect>
+          <circle cx="4" cy="4" r="2"></circle>
+        </svg>
+      </div>
+      <div class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+        </svg>
+      </div>
+    </div>
+    
+    <a href="#" class="back-to-home">
+      <span class="back-arrow">←</span> Return to Home
+    </a>
+  </div>
+  
+  <script>
+    // Three.js Animation
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    container.appendChild(renderer.domElement);
+    
+    // Create shield geometry
+    const radius = 5;
+    const shieldShape = new THREE.Shape();
+    
+    shieldShape.moveTo(0, -radius);
+    shieldShape.bezierCurveTo(
+      radius, -radius,
+      radius * 1.2, -radius * 0.5,
+      radius * 1.2, 0
+    );
+    shieldShape.bezierCurveTo(
+      radius * 1.2, radius * 0.8,
+      radius * 0.8, radius * 1.5,
+      0, radius * 2
+    );
+    shieldShape.bezierCurveTo(
+      -radius * 0.8, radius * 1.5,
+      -radius * 1.2, radius * 0.8,
+      -radius * 1.2, 0
+    );
+    shieldShape.bezierCurveTo(
+      -radius * 1.2, -radius * 0.5,
+      -radius, -radius,
+      0, -radius
+    );
+    
+    const extrudeSettings = {
+      depth: 0.2,
+      bevelEnabled: true,
+      bevelSegments: 2,
+      bevelSize: 0.1,
+      bevelThickness: 0.1
+    };
+    
+    const shieldGeometry = new THREE.ExtrudeGeometry(shieldShape, extrudeSettings);
+    const shieldMaterial = new THREE.MeshPhongMaterial({
+      color: 0x00bbff,
+      emissive: 0x002233,
+      specular: 0x00ffcc,
+      shininess: 30,
+      transparent: true,
+      opacity: 0.9
+    });
+    
+    const shield = new THREE.Mesh(shieldGeometry, shieldMaterial);
+    scene.add(shield);
+    
+    // Add lock icon to shield
+    const lockGroup = new THREE.Group();
+    
+    // Lock body
+    const lockBodyGeometry = new THREE.BoxGeometry(2, 1.5, 0.5);
+    const lockBodyMaterial = new THREE.MeshPhongMaterial({
+      color: 0x00ffcc,
+      emissive: 0x003322,
+      specular: 0xffffff,
+      shininess: 50
+    });
+    const lockBody = new THREE.Mesh(lockBodyGeometry, lockBodyMaterial);
+    lockBody.position.y = -0.5;
+    lockGroup.add(lockBody);
+    
+    // Lock shackle
+    const curve = new THREE.EllipseCurve(
+      0, 0.5,
+      1, 1,
+      Math.PI, 0,
+      false
+    );
+    
+    const points = curve.getPoints(20);
+    const shackleGeometry = new THREE.BufferGeometry().setFromPoints(points);
+    const shackleMaterial = new THREE.LineBasicMaterial({ color: 0x00ffcc, linewidth: 2 });
+    const shackle = new THREE.Line(shackleGeometry, shackleMaterial);
+    shackle.position.z = 0.1;
+    lockGroup.add(shackle);
+    
+    lockGroup.position.z = 0.5;
+    shield.add(lockGroup);
+    
+    // Create particles
+    const particlesCount = 100;
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesMaterial = new THREE.PointsMaterial({
+      color: 0x00ffcc,
+      size: 0.2,
+      transparent: true,
+      opacity: 0.7,
+      blending: THREE.AdditiveBlending
+    });
+    
+    const particlePositions = new Float32Array(particlesCount * 3);
+    const particleSpeeds = new Float32Array(particlesCount);
+    
+    for (let i = 0; i < particlesCount; i++) {
+      const i3 = i * 3;
+      particlePositions[i3] = (Math.random() - 0.5) * 20;
+      particlePositions[i3 + 1] = (Math.random() - 0.5) * 20;
+      particlePositions[i3 + 2] = (Math.random() - 0.5) * 20;
+      
+      particleSpeeds[i] = Math.random() * 0.02 + 0.01;
+    }
+    
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+    
+    const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particles);
+    
+    // Add lights
+    const ambientLight = new THREE.AmbientLight(0x333333);
+    scene.add(ambientLight);
+    
+    const light1 = new THREE.DirectionalLight(0x00ffcc, 1);
+    light1.position.set(5, 5, 5);
+    scene.add(light1);
+    
+    const light2 = new THREE.DirectionalLight(0x0088ff, 1);
+    light2.position.set(-5, -5, 5);
+    scene.add(light2);
+    
+    // Position camera
+    camera.position.z = 15;
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+    
+    // Animation loop
+    const clock = new THREE.Clock();
+    
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      const elapsedTime = clock.getElapsedTime();
+      
+      // Rotate shield
+      shield.rotation.y = Math.sin(elapsedTime * 0.3) * 0.2;
+      shield.rotation.x = Math.sin(elapsedTime * 0.2) * 0.1;
+      
+      // Update particles
+      const positions = particles.geometry.attributes.position.array;
+      
+      for (let i = 0; i < particlesCount; i++) {
+        const i3 = i * 3;
+        positions[i3 + 1] -= particleSpeeds[i];
+        
+        // Reset particle position when it goes too far down
+        if (positions[i3 + 1] < -10) {
+          positions[i3 + 1] = 10;
+          positions[i3] = (Math.random() - 0.5) * 20;
+          positions[i3 + 2] = (Math.random() - 0.5) * 20;
+        }
+      }
+      
+      particles.geometry.attributes.position.needsUpdate = true;
+      
+      // Pulse effect on shield
+      const pulseScale = 1 + Math.sin(elapsedTime * 2) * 0.05;
+      shield.scale.set(pulseScale, pulseScale, pulseScale);
+      
+      renderer.render(scene, camera);
+    }
+    
+    animate();
+    
+    // Countdown timer
+    const launchDate = new Date();
+    launchDate.setDate(launchDate.getDate() + 30); // 30 days from now
+    
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = launchDate - now;
+      
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      
+      document.getElementById('days').innerText = days.toString().padStart(2, '0');
+      document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+      document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+      document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+    }
+    
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    
+    // Floating particles effect
+    function createFloatingParticle() {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      document.body.appendChild(particle);
+      
+      // Random starting position
+      const startX = Math.random() * window.innerWidth;
+      const startY = window.innerHeight + 10;
+      
+      particle.style.left = `${startX}px`;
+      particle.style.top = `${startY}px`;
+      
+      // Random size
+      const size = Math.random() * 3 + 2;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      
+      // Animation with GSAP
+      gsap.to(particle, {
+        y: -window.innerHeight - 20,
+        x: startX + (Math.random() - 0.5) * 200,
+        opacity: () => Math.random() * 0.5 + 0.5,
+        duration: Math.random() * 15 + 10,
+        ease: "power1.in",
+        onComplete: () => {
+          particle.remove();
+        }
+      });
+    }
+    
+    // Create particles periodically
+    setInterval(createFloatingParticle, 300);
+    
+    // Notification form submit handling
+    document.querySelector('.form-group').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Thank you! We will notify you when we launch.');
+    });
+    
+    document.querySelector('.submit-btn').addEventListener('click', () => {
+      const emailInput = document.querySelector('.form-input');
+      if (emailInput.value) {
+        alert('Thank you! We will notify you when we launch.');
+        emailInput.value = '';
+      } else {
+        alert('Please enter your email address.');
+      }
+    });
+  </script>
+</body>
+</html>
