@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Atlassoit Security</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    
+    body {
+      background-color: #0a0a1a;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+    
+    #canvas-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: -1;
+    }
+    
+    .content {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 10%;
+      background-color: rgba(10, 10, 26, 0.7);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 100;
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #00ffcc;
+      letter-spacing: 1px;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    
+    .nav-links a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-links a:hover {
+      color: #00ffcc;
+    }
+    
+    .contact-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 8rem 2rem 4rem 2rem;
+    }
+    
+    .contact-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 3rem;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, #00ffcc, #00bbff);
+    }
+    
+    .contact-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .contact-title {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(45deg, #00ffcc, #00bbff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .contact-subtitle {
+      color: #b3b3cc;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    
+    .contact-methods {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    
+    .contact-method {
+      display: flex;
+      align-items: center;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 15px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .contact-method:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 255, 204, 0.1);
+    }
+    
+    .method-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(45deg, rgba(0, 255, 204, 0.1), rgba(0, 187, 255, 0.1));
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 1.5rem;
+      font-size: 1.8rem;
+      color: #00ffcc;
+    }
+    
+    .method-details {
+      flex: 1;
+    }
+    
+    .method-title {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: #ffffff;
+    }
+    
+    .method-value {
+      font-size: 1.1rem;
+      color: #00ffcc;
+      font-weight: 500;
+      word-break: break-all;
+    }
+    
+    .method-desc {
+      margin-top: 0.5rem;
+      color: #b3b3cc;
+      font-size: 0.9rem;
+    }
+    
+    .emergency-badge {
+      background: linear-gradient(90deg, #ff6b6b, #ff9f43);
+      color: #ffffff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.3rem 0.6rem;
+      border-radius: 20px;
+      margin-left: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .globe-decoration {
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(0, 255, 204, 0.1) 0%, rgba(10, 10, 26, 0) 70%);
+      border-radius: 50%;
+      opacity: 0.5;
+      animation: pulse 4s infinite alternate;
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 0.3;
+      }
+      100% {
+        transform: scale(1.2);
+        opacity: 0.5;
+      }
+    }
+    
+    .particle {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #00ffcc;
+      box-shadow: 0 0 10px 2px rgba(0, 255, 204, 0.8);
+      pointer-events: none;
+      opacity: 0;
+    }
+    
+    footer {
+      padding: 2rem 10%;
+      background-color: #080814;
+      text-align: center;
+    }
+    
+    .copyright {
+      color: #686880;
+      font-size: 0.9rem;
+    }
+    
+    .security-note {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+      color: #b3b3cc;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+    
+    @media (max-width: 768px) {
+      nav {
+        padding: 1rem 5%;
+      }
+      
+      .logo {
+        font-size: 1.5rem;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .contact-card {
+        padding: 2rem;
+      }
+      
+      .contact-title {
+        font-size: 2rem;
+      }
+      
+      .method-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 3D Canvas Container -->
+  <div id="canvas-container"></div>
+  
+  <div class="content">
+    <nav>
+      <div class="logo">ATLASSOIT</div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="partners.html">Partners</a>
+        <a href="contact.html" class="active">Contact</a>
+      </div>
+    </nav>
+    
+    <main class="contact-container">
+      <div class="contact-card">
+        <div class="globe-decoration"></div>
+        
+        <div class="contact-header">
+          <h1 class="contact-title">Get in Touch</h1>
+          <p class="contact-subtitle">Our security team is ready to assist you with any questions or urgent security concerns.</p>
+        </div>
+        
+        <div class="contact-methods">
+          <div class="contact-method">
+            <div class="method-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="method-details">
+              <h3 class="method-title">Email Us</h3>
+              <p class="method-value">kishan@atlassoit.com</p>
+              <p class="method-desc">For general inquiries and partnership opportunities</p>
+            </div>
+          </div>
+          
+          <div class="contact-method">
+            <div class="method-icon">
+              <i class="fab fa-whatsapp"></i>
+            </div>
+            <div class="method-details">
+              <h3 class="method-title">WhatsApp <span class="emergency-badge">24/7</span></h3>
+              <p class="method-value">+66 640702554</p>
+              <p class="method-desc">Available round-the-clock for urgent security concerns</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="security-note">
+          <i class="fas fa-shield-alt"></i> For security reasons. We recommend using our secure channels for sharing sensitive information.
+        </div>
+      </div>
+    </main>
+    
+    <footer>
+      <div class="copyright">
+        © 2025 Atlassoit Security. All rights reserved.
+      </div>
+    </footer>
+  </div>
+  
+  <script>
+    // Three.js Animation
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    container.appendChild(renderer.domElement);
+    
+    // Create particles
+    const particlesCount = 500;
+    const positions = new Float32Array(particlesCount * 3);
+    const scales = new Float32Array(particlesCount);
+    
+    const geometry = new THREE.BufferGeometry();
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        time: { value: 0 },
+        color: { value: new THREE.Color(0x00ffcc) }
+      },
+      vertexShader: `
+        attribute float scale;
+        uniform float time;
+        varying vec3 vColor;
+        
+        void main() {
+          vec3 pos = position;
+          pos.y += sin(time * 0.5 + position.x * 0.05) * 0.5;
+          pos.x += cos(time * 0.3 + position.z * 0.05) * 0.3;
+          
+          vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+          gl_PointSize = scale * (300.0 / -mvPosition.z);
+          gl_Position = projectionMatrix * mvPosition;
+          
+          vColor = vec3(0.0, 1.0, 0.8) * (sin(time * 0.1 + position.x * 0.01) * 0.5 + 0.5);
+        }
+      `,
+      fragmentShader: `
+        varying vec3 vColor;
+        
+        void main() {
+          float dist = length(gl_PointCoord - vec2(0.5, 0.5));
+          if (dist > 0.5) discard;
+          
+          float opacity = 1.0 - (dist * 2.0);
+          gl_FragColor = vec4(vColor, opacity);
+        }
+      `,
+      transparent: true,
+      depthWrite: false
+    });
+    
+    // Set particle positions
+    for (let i = 0; i < particlesCount; i++) {
+      const i3 = i * 3;
+      positions[i3] = (Math.random() - 0.5) * 50;
+      positions[i3 + 1] = (Math.random() - 0.5) * 50;
+      positions[i3 + 2] = (Math.random() - 0.5) * 50;
+      
+      scales[i] = Math.random() * 2 + 1;
+    }
+    
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
+    
+    const particles = new THREE.Points(geometry, material);
+    scene.add(particles);
+    
+    // Position camera
+    camera.position.z = 30;
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+    
+    // Animation loop
+    const clock = new THREE.Clock();
+    
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      const elapsedTime = clock.getElapsedTime();
+      
+      // Update shader time
+      material.uniforms.time.value = elapsedTime;
+      
+      renderer.render(scene, camera);
+    }
+    
+    animate();
+    
+    // Parallax effect on mouse move
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 5;
+      const y = (e.clientY / window.innerHeight - 0.5) * 5;
+      
+      gsap.to(scene.rotation, {
+        x: -y * 0.05,
+        y: x * 0.05,
+        duration: 1
+      });
+    });
+    
+    // Create glowing particles on click
+    document.addEventListener('click', (e) => {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      document.body.appendChild(particle);
+      
+      // Position at click coordinates
+      particle.style.left = `${e.clientX}px`;
+      particle.style.top = `${e.clientY}px`;
+      
+      // Animate
+      gsap.to(particle, {
+        opacity: 1,
+        duration: 0.2,
+        onComplete: () => {
+          gsap.to(particle, {
+            opacity: 0,
+            scale: 10,
+            duration: 1,
+            ease: "power2.out",
+            onComplete: () => {
+              particle.remove();
+            }
+          });
+        }
+      });
+    });
+    
+    // Animate contact methods
+    const contactMethods = document.querySelectorAll('.contact-method');
+    
+    gsap.from(contactMethods, {
+      y: 30,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.2,
+      ease: "power2.out",
+      delay: 0.5
+    });
+  </script>
+</body>
+</html>

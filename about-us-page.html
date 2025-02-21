@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - Atlassoit Security</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    
+    body {
+      background-color: #0a0a1a;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+    
+    #canvas-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: -1;
+    }
+    
+    .content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 10%;
+      background-color: rgba(10, 10, 26, 0.7);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 100;
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #00ffcc;
+      letter-spacing: 1px;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    
+    .nav-links a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-links a:hover {
+      color: #00ffcc;
+    }
+    
+    .btn {
+      background: linear-gradient(45deg, #00ffcc, #00bbff);
+      color: #0a0a1a;
+      padding: 0.7rem 1.5rem;
+      border-radius: 30px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 255, 204, 0.2);
+    }
+    
+    header {
+      height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0 10%;
+      text-align: center;
+      margin-top: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    header::before {
+      content: "";
+      position: absolute;
+      width: 150%;
+      height: 100%;
+      top: 0;
+      left: -25%;
+      background: linear-gradient(45deg, rgba(0, 255, 204, 0.05), rgba(0, 187, 255, 0.05));
+      transform: skewY(-3deg);
+      z-index: -1;
+    }
+    
+    .header-content {
+      max-width: 900px;
+      animation: fadeIn 1s ease-in-out;
+    }
+    
+    h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+      background: linear-gradient(45deg, #00ffcc, #00bbff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .subtitle {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      color: #b3b3cc;
+      line-height: 1.6;
+    }
+    
+    .mission-section {
+      padding: 5rem 10%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      background: linear-gradient(to right, #00ffcc, #00bbff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .mission-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 3rem;
+      align-items: center;
+    }
+    
+    .mission-text {
+      padding-right: 2rem;
+    }
+    
+    .mission-text p {
+      color: #b3b3cc;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+    
+    .mission-visual {
+      position: relative;
+      height: 400px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 255, 204, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .team-section {
+      padding: 5rem 10%;
+      background: rgba(255, 255, 255, 0.02);
+    }
+    
+    .team-intro {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 4rem auto;
+    }
+    
+    .team-intro p {
+      color: #b3b3cc;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-top: 1rem;
+    }
+    
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.5rem;
+    }
+    
+    .team-member {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .team-member:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    }
+    
+    .member-photo {
+      width: 100%;
+      height: 300px;
+      overflow: hidden;
+      background-color: #0f0f24;
+      position: relative;
+    }
+    
+    .member-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .team-member:hover .member-photo img {
+      transform: scale(1.05);
+    }
+    
+    .member-info {
+      padding: 1.5rem;
+    }
+    
+    .member-name {
+      font-size: 1.3rem;
+      margin-bottom: 0.3rem;
+      color: #ffffff;
+    }
+    
+    .member-role {
+      font-size: 0.9rem;
+      color: #00ffcc;
+      margin-bottom: 1rem;
+    }
+    
+    .member-bio {
+      color: #b3b3cc;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    
+    .timeline-section {
+      padding: 5rem 10%;
+      position: relative;
+    }
+    
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      top: 200px;
+      bottom: 100px;
+      width: 4px;
+      background: linear-gradient(to bottom, #00ffcc, #00bbff);
+      transform: translateX(-50%);
+    }
+    
+    .timeline-item {
+      display: flex;
+      margin-bottom: 5rem;
+      position: relative;
+      opacity: 0.4;
+      transition: opacity 0.8s ease;
+    }
+    
+    .timeline-item.active {
+      opacity: 1;
+    }
+    
+    .timeline-item:nth-child(odd) {
+      justify-content: flex-start;
+    }
+    
+    .timeline-item:nth-child(even) {
+      justify-content: flex-end;
+    }
+    
+    .timeline-item:nth-child(odd) .timeline-content {
+      margin-right: 50px;
+    }
+    
+    .timeline-item:nth-child(even) .timeline-content {
+      margin-left: 50px;
+    }
+    
+    .timeline-dot {
+      position: absolute;
+      left: 50%;
+      top: 20px;
+      width: 20px;
+      height: 20px;
+      background: #00ffcc;
+      border-radius: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      box-shadow: 0 0 15px rgba(0, 255, 204, 0.8);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .timeline-item.active .timeline-dot {
+      transform: translateX(-50%) scale(1.5);
+      box-shadow: 0 0 30px rgba(0, 255, 204, 1);
+    }
+    
+    .timeline-content {
+      width: 45%;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+      padding: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .timeline-year {
+      display: inline-block;
+      background: linear-gradient(45deg, #00ffcc, #00bbff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    
+    .timeline-title {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: #ffffff;
+    }
+    
+    .timeline-desc {
+      color: #b3b3cc;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    
+    .values-section {
+      padding: 5rem 10%;
+      background: linear-gradient(to right, rgba(0, 187, 255, 0.05), rgba(0, 255, 204, 0.05));
+      text-align: center;
+    }
+    
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      margin-top: 4rem;
+    }
+    
+    .value-card {
+      background: rgba(10, 10, 26, 0.8);
+      border-radius: 10px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: transform 0.3s ease;
+    }
+    
+    .value-card:hover {
+      transform: translateY(-10px);
+    }
+    
+    .value-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: #00ffcc;
+    }
+    
+    .value-title {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: #ffffff;
+    }
+    
+    .value-desc {
+      color: #b3b3cc;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    
+    .cta-section {
+      padding: 6rem 10%;
+      text-align: center;
+      background: #080814;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cta-content {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .cta-subtitle {
+      color: #00ffcc;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    
+    .cta-title {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: #ffffff;
+    }
+    
+    .cta-text {
+      color: #b3b3cc;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+    
+    .cta-particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.3;
+    }
+    
+    footer {
+      padding: 3rem 10%;
+      background-color: #050510;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem;
+      width: 100%;
+      margin-bottom: 3rem;
+    }
+    
+    .footer-col h4 {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      color: #00ffcc;
+    }
+    
+    .footer-col ul {
+      list-style: none;
+    }
+    
+    .footer-col ul li {
+      margin-bottom: 0.8rem;
+    }
+    
+    .footer-col ul li a {
+      color: #b3b3cc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-col ul li a:hover {
+      color: #00ffcc;
+    }
+    
+    .copyright {
+      margin-top: 2rem;
+      color: #686880;
+      font-size: 0.9rem;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @media (max-width: 992px) {
+      .mission-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .mission-visual {
+        height: 300px;
+      }
+      
+      .timeline-line {
+        left: 20px;
+      }
+      
+      .timeline-item {
+        justify-content: flex-start !important;
+      }
+      
+      .timeline-dot {
+        left: 20px;
+      }
+      
+      .timeline-content {
+        width: 85%;
+        margin-left: 50px !important;
+      }
+      
+      .team-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      }
+    }
+    
+    @media (max-width: 768px) {
+      nav {
+        padding: 1rem 5%;
+      }
+      
+      .logo {
+        font-size: 1.5rem;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      header, .mission-section, .team-section, .timeline-section, .values-section, .cta-section {
+        padding-left: 5%;
+        padding-right: 5%;
+      }
+      
+      h1 {
+        font-size: 2.5rem;
+      }
+      
+      .subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .mission-text {
+        padding-right: 0;
+      }
+      
+      .timeline-content {
+        width: 80%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 3D Canvas Background -->
+  <canvas id="canvas-background"></canvas>
+  
+  <div class="content">
+    <nav>
+      <div class="logo">ATLASSOIT</div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#partners">Partners</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <button class="btn">Get Protected</button>
+    </nav>
+    
+    <header>
+      <div class="header-content">
+        <h1>Our Story & Mission</h1>
+        <p class="subtitle">Atlassoit Security was founded with a clear purpose: to make enterprise-grade cybersecurity accessible, automated, and ahead of evolving threats.</p>
+      </div>
+    </header>
+    
+    <section class="mission-section">
+      <h2 class="section-title">Our Mission</h2>
+      <div class="mission-content">
+        <div class="mission-text">
+          <p>At Atlassoit Security, we're driven by the belief that robust cybersecurity should be accessible to organizations of all sizes. Our mission is to democratize advanced security capabilities through intelligent automation and AI-powered tools.</p>
+          <p>We recognize that today's digital landscape presents unprecedented security challenges. The sophistication of threats has evolved faster than traditional security practices can handle. That's why we've built a new approach – one that leverages artificial intelligence, automation, and security expertise to provide comprehensive protection.</p>
+          <p>Our tools don't just identify vulnerabilities; they prioritize them based on real-world risk, recommend specific remediation steps, and continuously monitor your systems for emerging threats. We believe security should be proactive, not reactive – stopping threats before they become breaches.</p>
+        </div>
+        <div class="mission-visual" id="mission-visual-canvas"></div>
+      </div>
+    </section>
+    
+    <section class="team-section">
+      <div class="team-intro">
+        <h2 class="section-title">Our Leadership Team</h2>
+        <p>Atlassoit Security brings together experts from cybersecurity, artificial intelligence, and enterprise software development. Our diverse team combines deep technical knowledge with practical business experience.</p>
+      </div>
+      
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="member-photo">
+            <img src="/api/placeholder/400/400" alt="Kishan Dwivedi">
+          </div>
+          <div class="member-info">
+            <h3 class="member-name">Kishan Dwivedi</h3>
+            <div class="member-role">Founder & CEO</div>
+            <p class="member-bio">Autistic nerd</p>
+          </div>
+        </div>
+        
+        <div class="team-member">
+          <div class="member-photo">
+            <img src="/api/placeholder/400/400" alt="Dr. Ananya Sharma">
+          </div>
+          <div class="member-info">
+            <h3 class="member-name">Dr. Aditi</h3>
+            <div class="member-role">Chief Technology Officer</div>
+            <p class="member-bio">prof at SOIT</p>
+          </div>
+        </div>
+        
+        <div class="team-member">
+          <div class="member-photo">
+            <img src="/api/placeholder/400/400" alt="Rajiv Mehta">
+          </div>
+          <div class="member-info">
+            <h3 class="member-name">someone </h3>
+            <div class="member-role">VP of Security Operations</div>
+            <p class="member-bio">A veteran security professional with experience at major technology companies, Rajiv oversees our security operations center and ensures that our tools remain ahead of emerging threats.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="timeline-section">
+      <h2 class="section-title">Our Journey</h2>
+      
+      <div class="timeline-line"></div>
+      
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">2022</div>
+          <h3 class="timeline-title">The Beginning</h3>
+          <p class="timeline-desc">Atlassoit Security was founded with the vision of democratizing enterprise-grade security through automation and AI. Our initial team of 2 cybersecurity specialists began development of our first tool.</p>
+        </div>
+      </div>
+      
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">2023</div>
+          <h3 class="timeline-title">First Product Launch</h3>
+          <p class="timeline-desc">We launched our automated penetration testing platform, enabling companies to continuously test their infrastructure against the latest vulnerabilities and attack techniques, and start intigration of AI</p>
+        </div>
+      </div>
+      
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">2024</div>
+          <h3 class="timeline-title">AI Code Review System and Tool international showcase</h3>
+          <p class="timeline-desc">We expanded our product suite with our AI-powered code security review system, took our tool to many international Security event to get peer reviewed and get feedbacks on our tool from best of best from security world</p>
+        </div>
+      </div>
+      
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">2025</div>
+          <h3 class="timeline-title">Partner Program Launch</h3>
+          <p class="timeline-desc">Today, we're launching our partner program, enabling software development companies to incorporate our security solutions into their service offerings.</p>
+        </div>
+      </div>
+    </section>
+    
+    <section class="values-section">
+      <h2 class="section-title">Our Core Values</h2>
+      
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon">🛡️</div>
+          <h3 class="value-title">Security First</h3>
+          <p class="value-desc">We place security at the center of everything we do. This means rigorously testing our own systems and maintaining the highest standards of data protection.</p>
+        </div>
+        
+        <div class="value-card">
+          <div class="value-icon">🔍</div>
+          <h3 class="value-title">Proactive Protection</h3>
+          <p class="value-desc">We believe in anticipating and preventing threats rather than just responding to incidents. Our tools are designed to identify vulnerabilities before they can be exploited.</p>
+        </div>
+        
+        <div class="value-card">
+          <div class="value-icon">🤖</div>
+          <h3 class="value-title">Intelligent Automation</h3>
+          <p class="value-desc">We harness the power of artificial intelligence and automation to scale security capabilities beyond what traditional approaches can achieve.</p>
+        </div>
+        
+        <div class="value-card">
+          <div class="value-icon">🤝</div>
+          <h3 class="value-title">Collaborative Security</h3>
+          <p class="value-desc">We believe security is a shared responsibility. We work closely with our partners and clients to create a more secure digital ecosystem for everyone.</p>
+        </div>
+      </div>
+    </section>
+    
+    <section class="cta-section">
+      <div id="cta-particles" class="cta-particles"></div>
+      <div class="cta-content">
+        <div class="cta-subtitle">Join Our Mission</div>
+        <h2 class="cta-title">Partner With Us to Secure the Digital Future</h2>
+        <p class="cta-text">Whether you're looking to enhance your organization's security posture or integrate our solutions into your service offerings, we're ready to collaborate with you.</p>
+        <button class="btn">Schedule a Consultation</button>
+      </div>
+    </section>
+    
+    <footer>
+      <div class="footer-content">
+        <div class="footer-col">
+          <h4>Atlassoit Security</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Our Team</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h4>Solutions</h4>
+          <ul>
+            <li><a href="#">Penetration Testing</a></li>
+            <li><a href="#">Code Security</a></li>
+            <li><a href="#">Cloud Security</a></li>
+            <li><a href="#">Compliance</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h4>Partners</h4>
+          <ul>
+            <li><a href="#">Partnership Program</a></li>
+            <li><a href="#">Success Stories</a></li>
+            <li><a href="#">Become a Partner</a></li>
+            <li><a href="#">Partner Portal</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Whitepapers</a></li>
+            <li><a href="#">Webinars</a></li>
+            <li><a href="#">Security Tools</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="copyright">
+        © 2025 Atlassoit Security. All rights reserved.
+      </div>
+    </footer>
+  </div>
+  
+  <script>
+    // Background Animation
+    const canvas = document.getElementById('canvas-background');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    
+    function setupCanvas() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      
+      canvas.width = width;
+      canvas.height = height;
+    }
+    
+    setupCanvas();
+    window.addEventListener('resize', setupCanvas);
+    
+    class HexGrid {
+      constructor() {
+        this.hexSize = 40;
+        this.hexagons = [];
+        this.initGrid();
+      }
+      
+      initGrid() {
+        const rows = Math.ceil(height / (this.hexSize * 1.5)) + 2;
+        const cols = Math.ceil(width / (this.hexSize * Math.sqrt(3))) + 2;
+        
+        for (let r = -1; r < rows; r++) {
+          for (let c = -1; c < cols; c++) {
+            const x = c * this.hexSize * Math.sqrt(3);
+            const y = r * this.hexSize * 1.5 + (c % 2) * (this.hexSize * 0.75);
+            
+            this.hexagons.push({
+              x,
+              y,
+              opacity: Math.random() * 0.15 + 0.05,
+              pulse: Math.random() * 2 * Math.PI,
+              pulseSpeed: 0.01 + Math.random() * 0.02
+            });
+          }
+        }
+      }
+      
+      draw(time) {
+        ctx.clearRect(0, 0, width, height);
+        
+        this.hexagons.forEach(hex => {
+          hex.pulse += hex.pulseSpeed;
+          const currentOpacity = hex.opacity + Math.sin(hex.pulse) * 0.1;
+          
+          this.drawHexagon(hex.x, hex.y, currentOpacity);
+        });
+      }
+      
+      drawHexagon(x, y, opacity) {
+        const size = this.hexSize;
+        ctx.beginPath();
+        for (let i = 0; i < 6; i++) {
+          const angle = Math.PI / 3 * i;
+          const xPos = x + size * Math.cos(angle);
+          const yPos = y + size * Math.sin(angle);
+          
+          if (i === 0) {
+            ctx.moveTo(xPos, yPos);
+          } else {
+            ctx.lineTo(xPos, yPos);
+          }
+        }
+        ctx.closePath();
+        ctx.strokeStyle = `rgba(0, 255, 204, ${opacity})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+    }
+    
+    const hexGrid = new HexGrid();
+    
+    function animate(time) {
+      hexGrid.draw(time);
+      requestAnimationFrame(animate);
+    }
+    
+    animate(0);
+    
+    // Mission Visual Canvas - 3D Security Visualization
+    const missionVisual = document.getElementById('mission-visual-canvas');
+    if (missionVisual) {
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, missionVisual.offsetWidth / missionVisual.offsetHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      
+      renderer.setSize(missionVisual.offsetWidth, missionVisual.offsetHeight);
+      missionVisual.appendChild(renderer.domElement);
+      
+      // Create shield mesh
+      const shieldGeometry = new THREE.SphereGeometry(5, 32, 32, 0, Math.PI * 2, 0, Math.PI / 2);
+      const shieldMaterial = new THREE.MeshBasicMaterial({
+        color: 0x00ffcc,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.7
+      });
+      const shield = new THREE.Mesh(shieldGeometry, shieldMaterial);
+      scene.add(shield);
+      
+      // Data nodes
+      const nodeCount = 50;
+      const

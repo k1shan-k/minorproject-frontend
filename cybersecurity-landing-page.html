@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atlassoit Security - Advanced Cybersecurity Solutions</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    
+    body {
+      background-color: #0a0a1a;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+    
+    #canvas-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: -1;
+    }
+    
+    .content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 10%;
+      background-color: rgba(10, 10, 26, 0.7);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 100;
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #00ffcc;
+      letter-spacing: 1px;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    
+    .nav-links a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-links a:hover {
+      color: #00ffcc;
+    }
+    
+    .btn {
+      background: linear-gradient(45deg, #00ffcc, #00bbff);
+      color: #0a0a1a;
+      padding: 0.7rem 1.5rem;
+      border-radius: 30px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 255, 204, 0.2);
+    }
+    
+    header {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 10%;
+    }
+    
+    .header-content {
+      max-width: 800px;
+      animation: fadeIn 1s ease-in-out;
+    }
+    
+    h1 {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+      background: linear-gradient(45deg, #00ffcc, #00bbff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .subtitle {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      color: #b3b3cc;
+      line-height: 1.6;
+    }
+    
+    .services {
+      padding: 6rem 10%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+    
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      width: 100%;
+    }
+    
+    .service-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      padding: 2rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 255, 204, 0.1);
+    }
+    
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -50%;
+      width: 200%;
+      height: 5px;
+      background: linear-gradient(45deg, #00ffcc, #00bbff);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .service-card:hover::before {
+      opacity: 1;
+    }
+    
+    .service-icon {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      color: #00ffcc;
+    }
+    
+    .service-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .service-desc {
+      color: #b3b3cc;
+      line-height: 1.6;
+    }
+    
+    .stats {
+      padding: 4rem 10%;
+      background: linear-gradient(to right, rgba(0, 187, 255, 0.1), rgba(0, 255, 204, 0.1));
+      text-align: center;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+    
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(45deg, #00ffcc, #00bbff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-text {
+      color: #b3b3cc;
+      font-size: 1.1rem;
+    }
+    
+    .cta {
+      padding: 8rem 10%;
+      text-align: center;
+      background: url('https://via.placeholder.com/1600x900') center/cover no-repeat;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 10, 26, 0.85);
+    }
+    
+    .cta-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+    
+    .cta-title {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .cta-text {
+      font-size: 1.2rem;
+      color: #b3b3cc;
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+    }
+    
+    footer {
+      padding: 3rem 10%;
+      background-color: #080814;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem;
+      width: 100%;
+      margin-bottom: 3rem;
+    }
+    
+    .footer-col h4 {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      color: #00ffcc;
+    }
+    
+    .footer-col ul {
+      list-style: none;
+    }
+    
+    .footer-col ul li {
+      margin-bottom: 0.8rem;
+    }
+    
+    .footer-col ul li a {
+      color: #b3b3cc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-col ul li a:hover {
+      color: #00ffcc;
+    }
+    
+    .copyright {
+      margin-top: 2rem;
+      color: #686880;
+      font-size: 0.9rem;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+      100% {
+        transform: translateY(0px);
+      }
+    }
+    
+    .floating {
+      animation: float 4s ease-in-out infinite;
+    }
+    
+    /* Glowing particles */
+    .particle {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #00ffcc;
+      box-shadow: 0 0 10px 2px rgba(0, 255, 204, 0.8);
+      pointer-events: none;
+      opacity: 0;
+    }
+    
+    @media (max-width: 768px) {
+      nav {
+        padding: 1rem 5%;
+      }
+      
+      .logo {
+        font-size: 1.5rem;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      header, .services, .stats, .cta {
+        padding-left: 5%;
+        padding-right: 5%;
+      }
+      
+      h1 {
+        font-size: 2.5rem;
+      }
+      
+      .subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 3D Canvas Container -->
+  <div id="canvas-container"></div>
+  
+  <div class="content">
+    <nav>
+      <div class="logo">ATLASSOIT</div>
+      <div class="nav-links">
+        <a href="#services">Services</a>
+        <a href="about-us-page.html">About</a>
+        <a href="#partners">Web3 offerings</a>
+        <a href="contact-page.html">Contact</a>
+      </div>
+      <button class="btn">Get Protected</button>
+    </nav>
+    
+    <header>
+      <div class="header-content">
+        <h1>Next-Gen Cybersecurity for Modern Enterprises</h1>
+        <p class="subtitle">Protecting your digital assets with AI-powered penetration testing and automated code security reviews. Stay ahead of threats with Atlassoit Security.</p>
+        <a href="betatools.html" class="btn">Discover Our Solutions</a>
+      </div>
+    </header>
+    
+    <section id="services" class="services">
+      <h2 class="section-title">Our Security Solutions</h2>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">🔍</div>
+          <h3 class="service-title">Automated Penetration Testing</h3>
+          <p class="service-desc">Continuously scan your infrastructure for vulnerabilities with our AI-powered penetration testing platform that simulates real-world attacks.</p>
+        </div>
+        
+        <div class="service-card">
+          <div class="service-icon">💻</div>
+          <h3 class="service-title">AI Code Review</h3>
+          <p class="service-desc">Our intelligent system analyzes your code to identify security vulnerabilities before they make it to production.</p>
+        </div>
+        
+        <div class="service-card">
+          <div class="service-icon">☁️</div>
+          <h3 class="service-title">Cloud Security</h3>
+          <p class="service-desc">Comprehensive security solutions for AWS, Azure, and Google Cloud environments to protect your cloud infrastructure.</p>
+        </div>
+      </div>
+    </section>
+    
+    <section class="stats">
+      <h2 class="section-title">Security By Numbers</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">70%</div>
+          <div class="stat-text">Faster Vulnerability Remediation</div>
+        </div>
+        
+        <div class="stat-item">
+          <div class="stat-number">24/7</div>
+          <div class="stat-text">Continuous Monitoring</div>
+        </div>
+        
+        <div class="stat-item">
+          <div class="stat-number">500+</div>
+          <div class="stat-text">Security Threats Blocked Daily</div>
+        </div>
+        
+        <div class="stat-item">
+          <div class="stat-number">99.9%</div>
+          <div class="stat-text">Service Uptime</div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="cta">
+      <div class="cta-content">
+        <h2 class="cta-title">Ready to Secure Your Digital Future?</h2>
+        <p class="cta-text">Partner with Atlassoit Security to protect your business with our cutting-edge cybersecurity solutions. Whether you're looking to secure your own infrastructure or offer security services to your clients, we have the tools and expertise you need.</p>
+        <button class="btn">Schedule a Security Assessment</button>
+      </div>
+    </section>
+    
+    <footer>
+      <div class="footer-content">
+        <div class="footer-col">
+          <h4>Atlassoit Security</h4>
+          <ul>
+            <li><a href="about-us-page.html">About Us</a></li>
+            <li><a href="about-us-page.html">Our Team</a></li>
+            <li><a href="coming-soon-page.html">Careers</a></li>
+            <li><a href="contact-page.html">Contact</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h4>Solutions</h4>
+          <ul>
+            <li><a href="betatools.html">Penetration Testing</a></li>
+            <li><a href="betatools.html">Code Security</a></li>
+            <li><a href="#">Cloud Security</a></li>
+            <li><a href="#">Compliance</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h4>Partners</h4>
+          <ul>
+            <li><a href="#">Partnership Program</a></li>
+            <li><a href="#">Success Stories</a></li>
+            <li><a href="#">Become a Partner</a></li>
+            <li><a href="#">Partner Portal</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="https://blog.atlassoit.co/">Blog</a></li>
+            <li><a href="https://web3.atlassoit.co/whitepaper">Whitepapers</a></li>
+            <li><a href="#">Webinars</a></li>
+            <li><a href="betatools.html">Security Tools</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="copyright">
+        © 2025 Atlassoit Security. All rights reserved.
+      </div>
+    </footer>
+  </div>
+  
+  <script>
+    // Three.js Animation
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    container.appendChild(renderer.domElement);
+    
+    // Create particles
+    const particlesCount = 1000;
+    const positions = new Float32Array(particlesCount * 3);
+    const scales = new Float32Array(particlesCount);
+    
+    const geometry = new THREE.BufferGeometry();
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        time: { value: 0 },
+        color: { value: new THREE.Color(0x00ffcc) }
+      },
+      vertexShader: `
+        attribute float scale;
+        uniform float time;
+        varying vec3 vColor;
+        
+        void main() {
+          vec3 pos = position;
+          pos.y += sin(time * 0.5 + position.x * 0.05) * 0.5;
+          pos.x += cos(time * 0.3 + position.z * 0.05) * 0.3;
+          
+          vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+          gl_PointSize = scale * (300.0 / -mvPosition.z);
+          gl_Position = projectionMatrix * mvPosition;
+          
+          vColor = vec3(0.0, 1.0, 0.8) * (sin(time * 0.1 + position.x * 0.01) * 0.5 + 0.5);
+        }
+      `,
+      fragmentShader: `
+        varying vec3 vColor;
+        
+        void main() {
+          float dist = length(gl_PointCoord - vec2(0.5, 0.5));
+          if (dist > 0.5) discard;
+          
+          float opacity = 1.0 - (dist * 2.0);
+          gl_FragColor = vec4(vColor, opacity);
+        }
+      `,
+      transparent: true,
+      depthWrite: false
+    });
+    
+    // Set particle positions
+    for (let i = 0; i < particlesCount; i++) {
+      const i3 = i * 3;
+      positions[i3] = (Math.random() - 0.5) * 50;
+      positions[i3 + 1] = (Math.random() - 0.5) * 50;
+      positions[i3 + 2] = (Math.random() - 0.5) * 50;
+      
+      scales[i] = Math.random() * 2 + 1;
+    }
+    
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
+    
+    const particles = new THREE.Points(geometry, material);
+    scene.add(particles);
+    
+    // Create network globe
+    const globeGeometry = new THREE.IcosahedronGeometry(10, 2);
+    const globeMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00bbff,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.3
+    });
+    
+    const globe = new THREE.Mesh(globeGeometry, globeMaterial);
+    scene.add(globe);
+    
+    // Create connection lines
+    const linesMaterial = new THREE.LineBasicMaterial({
+      color: 0x00ffcc,
+      transparent: true,
+      opacity: 0.5
+    });
+    
+    // Create random connections between vertices
+    const connections = [];
+    const vertices = globeGeometry.attributes.position;
+    
+    for (let i = 0; i < 20; i++) {
+      const start = Math.floor(Math.random() * vertices.count);
+      const end = Math.floor(Math.random() * vertices.count);
+      
+      const lineGeometry = new THREE.BufferGeometry();
+      const linePositions = new Float32Array(6);
+      
+      // Start point
+      linePositions[0] = vertices.getX(start);
+      linePositions[1] = vertices.getY(start);
+      linePositions[2] = vertices.getZ(start);
+      
+      // End point
+      linePositions[3] = vertices.getX(end);
+      linePositions[4] = vertices.getY(end);
+      linePositions[5] = vertices.getZ(end);
+      
+      lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+      
+      const line = new THREE.Line(lineGeometry, linesMaterial);
+      scene.add(line);
+      connections.push({
+        line,
+        duration: Math.random() * 2 + 1,
+        progress: 0,
+        start,
+        end
+      });
+    }
+    
+    // Position camera
+    camera.position.z = 30;
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+    
+    // Animation loop
+    const clock = new THREE.Clock();
+    
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      const elapsedTime = clock.getElapsedTime();
+      
+      // Update shader time
+      material.uniforms.time.value = elapsedTime;
+      
+      // Rotate globe
+      globe.rotation.y = elapsedTime * 0.1;
+      globe.rotation.x = Math.sin(elapsedTime * 0.05) * 0.2;
+      
+      // Update connections
+      connections.forEach(conn => {
+        conn.progress += 0.005 / conn.duration;
+        if (conn.progress > 1) {
+          conn.progress = 0;
+          
+          // Pick new random vertices
+          const newStart = Math.floor(Math.random() * vertices.count);
+          const newEnd = Math.floor(Math.random() * vertices.count);
+          
+          conn.start = newStart;
+          conn.end = newEnd;
+        }
+        
+        // Animate line position
+        const linePositions = conn.line.geometry.attributes.position.array;
+        
+        // Interpolate between vertices
+        for (let i = 0; i < 3; i++) {
+          linePositions[i + 3] = vertices.getX(conn.end) * conn.progress + vertices.getX(conn.start) * (1 - conn.progress);
+          linePositions[i + 4] = vertices.getY(conn.end) * conn.progress + vertices.getY(conn.start) * (1 - conn.progress);
+          linePositions[i + 5] = vertices.getZ(conn.end) * conn.progress + vertices.getZ(conn.start) * (1 - conn.progress);
+        }
+        
+        conn.line.geometry.attributes.position.needsUpdate = true;
+      });
+      
+      renderer.render(scene, camera);
+    }
+    
+    animate();
+    
+    // Parallax effect on mouse move
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 5;
+      const y = (e.clientY / window.innerHeight - 0.5) * 5;
+      
+      gsap.to(scene.rotation, {
+        x: -y * 0.05,
+        y: x * 0.05,
+        duration: 1
+      });
+    });
+    
+    // Create glowing particles on click
+    document.addEventListener('click', (e) => {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      document.body.appendChild(particle);
+      
+      // Position at click coordinates
+      particle.style.left = `${e.clientX}px`;
+      particle.style.top = `${e.clientY}px`;
+      
+      // Animate
+      gsap.to(particle, {
+        opacity: 1,
+        duration: 0.2,
+        onComplete: () => {
+          gsap.to(particle, {
+            opacity: 0,
+            scale: 10,
+            duration: 1,
+            ease: "power2.out",
+            onComplete: () => {
+              particle.remove();
+            }
+          });
+        }
+      });
+      
+      // Create ripple effect
+      for (let i = 0; i < 8; i++) {
+        const ripple = document.createElement('div');
+        ripple.className = 'particle';
+        document.body.appendChild(ripple);
+        
+        const angle = (i / 8) * Math.PI * 2;
+        const distance = Math.random() * 100 + 50;
+        
+        ripple.style.left = `${e.clientX}px`;
+        ripple.style.top = `${e.clientY}px`;
+        
+        gsap.to(ripple, {
+          opacity: 0.7,
+          x: Math.cos(angle) * distance,
+          y: Math.sin(angle) * distance,
+          duration: 0.2,
+          onComplete: () => {
+            gsap.to(ripple, {
+              opacity: 0,
+              duration: 0.8,
+              onComplete: () => {
+                ripple.remove();
+              }
+            });
+          }
+        });
+      }
+    });
+    
+    // Animate service cards on scroll
+    const serviceCards = document.querySelectorAll('.service-card');
+    
+    const observerOptions = {
+      threshold: 0.2,
+      rootMargin: '0px 0px -100px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          gsap.to(entry.target, {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: "power2.out"
+          });
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    
+    serviceCards.forEach((card, index) => {
+      gsap.set(card, {
+        y: 50,
+        opacity: 0
+      });
+      observer.observe(card);
+    });
+  </script>
+</body>
+</html>
