@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule a Call - Atlassoit Security</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: #0a0a1a;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 10%;
+            background-color: rgba(10, 10, 26, 0.9);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #00ffcc;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #00ffcc;
+        }
+
+        .schedule-container {
+            max-width: 1200px;
+            margin: 100px auto 0;
+            padding: 2rem;
+        }
+
+        .schedule-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .schedule-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00ffcc, #00bbff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .schedule-header p {
+            color: #b3b3cc;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .schedule-info {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-item {
+            margin-bottom: 2rem;
+        }
+
+        .info-item h3 {
+            color: #00ffcc;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .info-item p {
+            color: #b3b3cc;
+            line-height: 1.6;
+        }
+
+        .calendar-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 968px) {
+            .schedule-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(0, 255, 204, 0.2) 0%, rgba(0, 255, 204, 0) 70%);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-100px) translateX(50px);
+            }
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/" class="logo">ATLASSOIT</a>
+        <div class="nav-links">
+            <a href="https://www.atlassoit.co/#services">Services</a>
+            <a href="https://www.atlassoit.co/about-us-page.html">About</a>
+            <a href="#partners">Partners</a>
+            <a href="https://www.atlassoit.co/contact-page.html">Contact</a>
+        </div>
+    </nav>
+
+    <div class="schedule-container">
+        <div class="schedule-header">
+            <h1>Schedule a Security Consultation</h1>
+            <p>Book a call with our security experts to discuss how we can protect your digital assets and help you build a robust security infrastructure.</p>
+        </div>
+
+        <div class="schedule-grid">
+            <div class="schedule-info">
+                <div class="info-item">
+                    <h3>What to Expect</h3>
+                    <p>During this 30-minute call, we'll discuss your security needs, current challenges, and how our solutions can help protect your business. Our expert will provide a high-level assessment and recommend the best security approach for your organization.</p>
+                </div>
+
+                <div class="info-item">
+                    <h3>Preparation</h3>
+                    <p>To make the most of our call, please have ready:</p>
+                    <ul style="color: #b3b3cc; margin-left: 20px; line-height: 1.6;">
+                        <li>Overview of your current security measures</li>
+                        <li>Key security challenges you're facing</li>
+                        <li>Questions about our services and approach</li>
+                    </ul>
+                </div>
+
+                <div class="info-item">
+                    <h3>After the Call</h3>
+                    <p>You'll receive a detailed summary of our discussion, along with a customized security assessment and recommended next steps for implementing robust security measures for your organization.</p>
+                </div>
+            </div>
+
+            <div class="calendar-container">
+                <!--booking calendar inline widget begin -->
+                <script type="text/javascript" src="https://cdn.oncehub.com/cal/embed.js" async></script>
+                <div data-oh-booking-calendar-id="BKC-19K6ENMY6Y" style="min-width:320px;height:700px;"></div>
+                <!--booking calendar inline widget end -->
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-particles" id="particles"></div>
+
+    <script>
+        // Create floating particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.width = Math.random() * 100 + 50 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 10 + 's';
+            particle.style.animationDuration = Math.random() * 20 + 10 + 's';
+            particlesContainer.appendChild(particle);
+        }
+    </script>
+</body>
+</html>
